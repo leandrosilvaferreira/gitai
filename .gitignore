@@ -1,0 +1,12 @@
+.DS_Store
+.pytest_cache
+__pycache__
+dist/
+.env
+assets/*
+.idea
+test/
+docs_crew/
+chroma.sqlite3
+old_en.json
+/packager/mac/
