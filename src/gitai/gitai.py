@@ -58,7 +58,7 @@ def detect_project_language(project_path):
     return "Desconhecido"
 
 
-def generate_commit_message(status_output, language, base_message):
+def generate_commit_message(status_output, language, project_language, base_message):
     prompt = dedent(f"""
     Com base nas informações fornecidas abaixo, crie uma mensagem de commit seguindo o padrão de Conventional Commits, 
     que é amplamente adotado para tornar as mensagens de commit mais descritivas e úteis. Este padrão utiliza prefixos 
@@ -69,7 +69,7 @@ def generate_commit_message(status_output, language, base_message):
         - fix: Uma correção de bug
         - chore: Mudanças de manutenção ou pequenas correções que não alteram a funcionalidade
 
-    A título de informação e para seu melhor entendimento, o projeto em questão utiliza a linguagem de programação {language}.
+    A título de informação e para seu melhor entendimento, o projeto em questão utiliza a linguagem de programação {project_language}.
 
     Descrição básica da mudança fornecida pelo programador a qual você deve usar como base para o início da sua mensagem: '{base_message}'
 
@@ -87,7 +87,7 @@ def generate_commit_message(status_output, language, base_message):
 
     Sempre que possível, cite na mensagem de commit somente os arquivos principais modificados sem incluir o path.
     
-    A mensagem final gerado não deve ter símboloes ``` ou qualquer outra formatação.
+    A mensagem final gerada não deve ter símboloes ``` ou qualquer outra formatação e deve ser no idioma {language}.
     """)
 
     # print(prompt)
@@ -107,7 +107,7 @@ def generate_commit_message(status_output, language, base_message):
             },
         ],
     )
-    return response.choices[0].message.content
+    return response.choices[0].message.content.replace('```', '').strip()
 
 
 def has_uncommitted_changes():
@@ -148,7 +148,7 @@ def main():
     os.chdir(args.project_path)
 
     # Detecta a linguagem do projeto
-    language = detect_project_language(args.project_path)
+    project_language = detect_project_language(args.project_path)
 
     # Obtém a lista de arquivos modificados que ainda não foram adicionados ao índice
     status_output = subprocess.check_output(['git', 'status'], encoding='utf-8')
@@ -157,7 +157,7 @@ def main():
     diff_output = subprocess.check_output(['git', 'diff'], encoding='utf-8')
 
     # Gera a mensagem de commit
-    commit_message = generate_commit_message(status_output + "\n" + diff_output, language, args.base_message)
+    commit_message = generate_commit_message(status_output + "\n" + diff_output, language, project_language, args.base_message)
 
     print("\n\nMensagem de commit gerada:\n")
     print(commit_message)
