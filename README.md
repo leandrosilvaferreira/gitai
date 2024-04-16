@@ -149,6 +149,14 @@ Isso irá criar um arquivo `.pkg` que instala o seu aplicativo.
 
 O Gitai irá analisar as alterações feitas no seu projeto, identificar a linguagem de programação usada e, com base nisso, gerar uma mensagem de commit detalhada seguindo o padrão Conventional Commits. Em seguida, ele irá adicionar todas as alterações ao índice do Git e realizar o commit com a mensagem gerada.
 
+## 📝 TODO
+
+- [x] Gerar release para Mac
+- [ ] Gerar release para Windows
+- [ ] Gerar release para Linux
+- [ ] Atualizar a documentação para incluir instruções de instalação para Windows e Linux
+- [ ] Adicionar suporte para mais linguagens de programação
+
 ## 🙌 Contribuindo
 
 Agradecemos o seu interesse em contribuir para o Gitai! Aqui estão algumas diretrizes que podem ajudá-lo no processo:
@@ -165,7 +173,7 @@ Agradecemos o seu interesse em contribuir para o Gitai! Aqui estão algumas dire
 
 6. **Envie um Pull Request**: Envie um pull request para o repositório original propondo suas alterações. Certifique-se de dar uma descrição detalhada de suas alterações para que os mantenedores do projeto possam entender o que você fez e por quê.
 
-## 📄Código de Conduta
+## 📄 Código de Conduta
 
 Pedimos que todos os contribuintes sigam nosso código de conduta. Respeito mútuo é fundamental para um ambiente de colaboração saudável. Por favor, seja profissional e respeitoso com os outros contribuintes.
 
