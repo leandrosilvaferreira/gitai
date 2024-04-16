@@ -12,6 +12,10 @@ Além disso, Gitai automatiza o processo de commit, adicionando todas as altera�
 
 O projeto também utiliza as bibliotecas `openai`, `python-dotenv` e `pyinstaller` para criar um executável que inclui as dependências do ambiente virtual e que lê as variáveis de ambiente de um arquivo `.env` na mesma pasta que o executável.
 
+## 💻 Screenshot
+
+![Gitai](docs/gitai.jpg)
+
 ## ⚡ Instalando a Aplicação
 
 Depois de gerar o arquivo `.pkg`, você pode seguir os passos abaixo para instalar a aplicação no seu Mac:
