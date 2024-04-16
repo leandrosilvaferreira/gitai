@@ -113,15 +113,67 @@ cd <nome-do-projeto>
 pip install -r requirements.txt
 ```
 
-### Gerando o Build
+### Gerando o executável
 
-Para gerar o build do projeto, execute o script `build.sh` na raiz do projeto.
+Para executar o build do projeto, execute o script `build.sh` na raiz do projeto.
 
 ```bash
 ./build.sh
 ```
 
-Este script irá gerar um executável do script Python usando o PyInstaller e copiará o arquivo `.env.example` para a pasta `dist`.
+Este script irá gerar um executável do script Python usando o PyInstaller chamado `gitai` e copiará o arquivo `.env.example` para a pasta `dist`.
+
+Caso você queira gerar um executável para uma plataforma específica, você pode usar os seguintes comandos:
+
+### Gerando o Instalador para Windows
+
+Para gerar um instalador para Windows, você precisa usar a ferramenta Inno Setup.
+
+#### Instalando o Inno Setup
+
+1. Acesse o site oficial do Inno Setup em http://www.jrsoftware.org/isinfo.php
+2. Clique no link "Download" na página.
+3. Baixe a versão mais recente do Inno Setup.
+4. Após o download do arquivo `.exe`, abra-o.
+5. Siga as instruções na tela para instalar o Inno Setup.
+6. Após a instalação, o Inno Setup deve estar disponível no seu computador.
+7. Abra o Inno Setup e clique em "File" > "New" para criar um novo script de instalação.
+8. Preencha os detalhes do seu projeto, como nome, versão e descrição.
+9. Adicione os arquivos necessários ao instalador, incluindo o executável gerado pelo PyInstaller e o arquivo `.env` de exemplo.
+10. Configure as opções de instalação, como o diretório de instalação e os atalhos.
+11. Clique em "Build" para gerar o instalador.
+12. Após a compilação, você terá um arquivo `.exe` que pode ser distribuído e usado para instalar o seu aplicativo no Windows.
+13. Execute o instalador no computador de destino para instalar o aplicativo.
+14. Após a instalação, o aplicativo estará disponível no menu Iniciar e no diretório de instalação.
+
+### Gerando o Instalador para Linux
+
+Para gerar um instalador para Linux, você precisa usar a ferramenta Makeself.
+
+#### Instalando o Makeself
+
+1. Acesse o site oficial do Makeself em https://makeself.io/
+2. Clique no link "Download" na página.
+3. Baixe a versão mais recente do Makeself.
+4. Após o download do arquivo `.run`, abra-o.
+5. Siga as instruções na tela para instalar o Makeself.
+6. Após a instalação, o Makeself deve estar disponível no seu computador.
+7. Abra o terminal e navegue até o diretório onde o executável gerado pelo PyInstaller está localizado.
+8. Execute o seguinte comando para criar o instalador:
+
+```bash
+makeself <diretório_de_origem> <nome_do_instalador> "<descrição_do_instalador>" <comando_de_instalação>
+```
+
+Substitua `<diretório_de_origem>` pelo diretório onde o executável gerado pelo PyInstaller está localizado, `<nome_do_instalador>` pelo nome do arquivo do instalador, `<descrição_do_instalador>` por uma descrição do instalador e `<comando_de_instalação>` por um comando de instalação.
+
+Por exemplo:
+
+```bash
+makeself dist/ GitaiInstaller.run "Instalador do Gitai" "./gitai"
+```
+
+Isso irá criar um arquivo `.run` que pode ser distribuído e usado para instalar o seu aplicativo no Linux.
 
 ### Gerando o Instalador para macOS
 
@@ -154,9 +206,9 @@ O Gitai irá analisar as alterações feitas no seu projeto, identificar a lingu
 ## 📝 TODO
 
 - [x] Gerar release para Mac
-- [ ] Gerar release para Windows
-- [ ] Gerar release para Linux
-- [ ] Atualizar a documentação para incluir instruções de instalação para Windows e Linux
+- [x] Gerar release para Windows
+- [x] Gerar release para Linux
+- [x] Atualizar a documentação para incluir instruções de instalação para Windows e Linux
 - [ ] Adicionar binário executável automaticamente no PATH
 - [ ] Adicionar suporte para mais linguagens de programação
 - [ ] Traduzir a documentação para Inglês
