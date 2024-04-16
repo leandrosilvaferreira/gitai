@@ -6,8 +6,6 @@ dist/
 assets/*
 .idea
 test/
-docs_crew/
 chroma.sqlite3
-old_en.json
 /packager/mac/
 build/
