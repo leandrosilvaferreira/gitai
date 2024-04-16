@@ -155,6 +155,7 @@ O Gitai irá analisar as alterações feitas no seu projeto, identificar a lingu
 - [ ] Gerar release para Windows
 - [ ] Gerar release para Linux
 - [ ] Atualizar a documentação para incluir instruções de instalação para Windows e Linux
+- [ ] Adicionar binário executável automaticamente no PATH
 - [ ] Adicionar suporte para mais linguagens de programação
 - [ ] Traduzir a documentação para Inglês
 - [ ] Traduzir prompts para Inglês
