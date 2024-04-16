@@ -1,4 +1,4 @@
-# Gitai - Automatize seus Commits no Git com IA
+# Gitai - Conventional Commits automatizados no Git com IA
 
 [![Release Notes](https://img.shields.io/github/release/leandrosilvaferreira/gitai)](https://github.com/leandrosilvaferreira/gitai/releases)
 [![GitHub star chart](https://img.shields.io/github/stars/leandrosilvaferreira/gitai?style=social)](https://star-history.com/#leandrosilvaferreira/gitai)
