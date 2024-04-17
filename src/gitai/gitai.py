@@ -18,7 +18,7 @@ env_path = os.path.join(exe_dir, '.env')
 load_dotenv(dotenv_path=env_path)
 
 # Lista de variáveis de ambiente necessárias
-required_env_vars = ['OPENAI_API_KEY', 'LANGUAGE']
+required_env_vars = ['OPENAI_MODEL', 'OPENAI_API_KEY', 'LANGUAGE']
 
 # Verifica se cada variável de ambiente necessária está definida e não está em branco
 for var in required_env_vars:
@@ -28,6 +28,7 @@ for var in required_env_vars:
         sys.exit(1)
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
+model = os.getenv('OPENAI_MODEL')
 language = os.getenv('LANGUAGE')
 
 
@@ -58,7 +59,7 @@ def detect_project_language(project_path):
     return "Desconhecido"
 
 
-def generate_commit_message(status_output, language, project_language, base_message):
+def generate_commit_message(status_output, project_language, base_message):
     prompt = dedent(f"""
     Com base nas informações fornecidas abaixo, crie uma mensagem de commit seguindo o padrão de Conventional Commits, 
     que é amplamente adotado para tornar as mensagens de commit mais descritivas e úteis. Este padrão utiliza prefixos 
@@ -94,7 +95,7 @@ def generate_commit_message(status_output, language, project_language, base_mess
 
     # O código para chamar a API da OpenAI e processar a resposta permanece o mesmo...
     response = openai.chat.completions.create(
-        model="gpt-4-turbo",
+        model=model,
         temperature=0.5,
         max_tokens=150,
         top_p=1.0,
@@ -157,7 +158,7 @@ def main():
     diff_output = subprocess.check_output(['git', 'diff'], encoding='utf-8')
 
     # Gera a mensagem de commit
-    commit_message = generate_commit_message(status_output + "\n" + diff_output, language, project_language, args.base_message)
+    commit_message = generate_commit_message(status_output + "\n" + diff_output, project_language, args.base_message)
 
     print("\n\nMensagem de commit gerada:\n")
     print(commit_message)

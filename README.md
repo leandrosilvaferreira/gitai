@@ -31,12 +31,13 @@ Lembre-se de que, após a instalação, você deve configurar o arquivo `.env` c
 
 ## 🌱 Configurando o .env
 
-Antes de executar o aplicativo, você precisa configurar o arquivo `.env` na pasta `dist`. Este arquivo contém as variáveis de ambiente que o aplicativo precisa para funcionar corretamente.
+Antes de executar o aplicativo, você precisa configurar o arquivo `.env` na pasta `dist` ou na pasta onde o GITAI foi instalado. Este arquivo contém as variáveis de ambiente que o aplicativo precisa para funcionar corretamente.
 
 Abra o arquivo `.env` em um editor de texto e preencha as variáveis de ambiente. Por exemplo:
 
 ```dotenv
 OPENAI_API_KEY=your_openai_api_key
+OPENAI_MODEL=gpt-3.5-turbo
 LANGUAGE=en
 ```
 
