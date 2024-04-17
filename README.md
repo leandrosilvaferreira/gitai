@@ -209,11 +209,13 @@ O Gitai irá analisar as alterações feitas no seu projeto, identificar a lingu
 - [x] Gerar release para Windows
 - [x] Gerar release para Linux
 - [x] Atualizar a documentação para incluir instruções de instalação para Windows e Linux
+- [ ] Adicionar possibilidade de utilizar a API do GROQ para gerar mensagens de commit
 - [ ] Adicionar binário executável automaticamente no PATH
 - [ ] Adicionar suporte para mais linguagens de programação
 - [ ] Traduzir a documentação para Inglês
 - [ ] Traduzir prompts para Inglês
 - [ ] Adicionar testes automatizados
+
 
 ## 🙌 Contribuindo
 
