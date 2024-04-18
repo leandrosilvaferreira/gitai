@@ -186,7 +186,7 @@ def main():
         status_output, _ = run_git_command(['git', 'status', '-uno'])
 
         if 'have diverged' in status_output:
-            print(f"Existem alterações remotas no branch atual, faça merge primeiro antes de fazer push.\nMsg:\n{status}")
+            print(f"Existem alterações remotas no branch atual, faça merge primeiro antes de fazer push.\nMsg:\n{status_output}")
             sys.exit(1)  # Interrompe o script se houver alterações remotas
 
         run_git_command(['git', 'push'])
