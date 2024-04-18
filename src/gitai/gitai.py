@@ -111,9 +111,19 @@ def generate_commit_message(status_output, project_language, base_message):
     return response.choices[0].message.content.replace('```', '').strip()
 
 
+def run_git_command(command):
+    """Executa um comando git e retorna a saída."""
+    try:
+        result = subprocess.run(command, check=True, text=True, capture_output=True, encoding='utf-8')
+        return result.stdout.strip(), result.returncode
+    except subprocess.CalledProcessError as e:
+        print(f"Erro ao executar o comando {command}: {e.stderr}")
+        sys.exit(1)
+
+
 def has_uncommitted_changes():
     # Verifica se há mudanças não commitadas
-    status = subprocess.check_output(['git', 'status', '--porcelain'], encoding='utf-8')
+    status = run_git_command(['git', 'status', '--porcelain'])
     return len(status) > 0
 
 
@@ -121,14 +131,14 @@ def commit_changes(commit_message):
     # Continua tentando commitar até que não haja mais mudanças feitas pelo hook de pré-commit
     while True:
         # Adiciona todos os arquivos modificados
-        subprocess.run(['git', 'add', '.'])
+        run_git_command(['git', 'add', '.'])
 
         # Tenta fazer o commit
-        commit_result = subprocess.run(['git', 'commit', '-m', commit_message])
+        _, commit_result = run_git_command(['git', 'commit', '-m', commit_message])
 
         # Se o commit foi bem-sucedido mas o hook de pré-commit fez mais alterações,
         # o loop irá continuar. Caso contrário, sai do loop.
-        if commit_result.returncode != 0 or not has_uncommitted_changes():
+        if commit_result != 0 or not has_uncommitted_changes():
             break
 
 
@@ -152,10 +162,10 @@ def main():
     project_language = detect_project_language(args.project_path)
 
     # Obtém a lista de arquivos modificados que ainda não foram adicionados ao índice
-    status_output = subprocess.check_output(['git', 'status'], encoding='utf-8')
+    status_output, _ = run_git_command(['git', 'status'])
 
     # Obtém as alterações detalhadas
-    diff_output = subprocess.check_output(['git', 'diff'], encoding='utf-8')
+    diff_output, _ = run_git_command(['git', 'diff'])
 
     # Gera a mensagem de commit
     commit_message = generate_commit_message(status_output + "\n" + diff_output, project_language, args.base_message)
@@ -165,13 +175,20 @@ def main():
 
     # Faz o commit
     commit_changes(commit_message)
+    print("Gitai concluiu o commit com sucesso.")
 
     # Se push_after_commit for true, executa git push
     if args.push:
-        subprocess.run(['git', 'push'])
-        print("Gitai concluiu o commit e realizou o push com sucesso.")
-    else:
-        print("Gitai concluiu o commit com sucesso.")
+        # Verifica se existem atualizações remotas
+        run_git_command(['git', 'fetch'])  # Atualiza as informações locais
+        status = run_git_command(['git', 'status', '-uno'])
+
+        if 'Your branch is behind' in status:
+            print("Existem alterações remotas no branch atual, faça merge primeiro antes de fazer push.")
+            sys.exit(1)  # Interrompe o script se houver alterações remotas
+
+        run_git_command(['git', 'push'])
+        print("Gitai concluiu o push com sucesso.")
 
 
 if __name__ == "__main__":
