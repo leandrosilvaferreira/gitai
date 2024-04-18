@@ -173,11 +173,11 @@ def main():
 
     print("\n\nMensagem de commit gerada:\n")
     print(commit_message)
-    print("\n\n")
+    print("\n")
 
     # Faz o commit
     commit_changes(commit_message)
-    print("Gitai concluiu o commit com sucesso.")
+    print("-> Gitai concluiu o commit com sucesso.")
 
     # Se push_after_commit for true, executa git push
     if args.push:
@@ -185,12 +185,12 @@ def main():
         run_git_command(['git', 'fetch'])  # Atualiza as informações locais
         status = run_git_command(['git', 'status', '-uno'])
 
-        if 'Your branch is behind' in status:
-            print("Existem alterações remotas no branch atual, faça merge primeiro antes de fazer push.")
+        if 'have diverged' in status:
+            print(f"Existem alterações remotas no branch atual, faça merge primeiro antes de fazer push.\nMsg:\n{status}")
             sys.exit(1)  # Interrompe o script se houver alterações remotas
 
         run_git_command(['git', 'push'])
-        print("Gitai concluiu o push com sucesso.")
+        print("-> Gitai concluiu o push com sucesso.")
 
 
 if __name__ == "__main__":
