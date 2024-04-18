@@ -18,7 +18,7 @@ O projeto também utiliza as bibliotecas `openai`, `python-dotenv` e `pyinstalle
 
 ![Gitai](docs/commits.jpg)
 
-## ⚡ Instalando a Aplicação
+## ⚡ Instalando a Aplicação no Mac
 
 Depois de gerar o arquivo `.pkg`, você pode seguir os passos abaixo para instalar a aplicação no seu Mac:
 
