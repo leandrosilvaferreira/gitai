@@ -124,8 +124,8 @@ def run_git_command(command):
 
 def has_uncommitted_changes():
     # Verifica se há mudanças não commitadas
-    status = run_git_command(['git', 'status', '--porcelain'])
-    return len(status) > 0
+    status_output, _ = run_git_command(['git', 'status', '--porcelain'])
+    return len(status_output) > 0
 
 
 def commit_changes(commit_message):
@@ -183,9 +183,9 @@ def main():
     if args.push:
         # Verifica se existem atualizações remotas
         run_git_command(['git', 'fetch'])  # Atualiza as informações locais
-        status = run_git_command(['git', 'status', '-uno'])
+        status_output, _ = run_git_command(['git', 'status', '-uno'])
 
-        if 'have diverged' in status:
+        if 'have diverged' in status_output:
             print(f"Existem alterações remotas no branch atual, faça merge primeiro antes de fazer push.\nMsg:\n{status}")
             sys.exit(1)  # Interrompe o script se houver alterações remotas
 
