@@ -117,7 +117,8 @@ def run_git_command(command):
         result = subprocess.run(command, check=True, text=True, capture_output=True, encoding='utf-8')
         return result.stdout.strip(), result.returncode
     except subprocess.CalledProcessError as e:
-        print(f"Erro ao executar o comando {command}: {e.stderr}")
+        print(f"Erro ao executar o comando:\n-> {command}\nerror: {e.stderr}")
+        print(f"\n\nSaída de erro padrão:\n {e.output}")
         sys.exit(1)
 
 
@@ -172,6 +173,7 @@ def main():
 
     print("\n\nMensagem de commit gerada:\n")
     print(commit_message)
+    print("\n\n")
 
     # Faz o commit
     commit_changes(commit_message)
