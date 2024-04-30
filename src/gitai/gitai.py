@@ -130,16 +130,15 @@ def has_uncommitted_changes():
 
 def commit_changes(commit_message):
     # Continua tentando commitar até que não haja mais mudanças feitas pelo hook de pré-commit
-    while True:
+    while has_uncommitted_changes():
         # Adiciona todos os arquivos modificados
         run_git_command(['git', 'add', '.'])
 
         # Tenta fazer o commit
         _, commit_result = run_git_command(['git', 'commit', '-m', commit_message])
 
-        # Se o commit foi bem-sucedido mas o hook de pré-commit fez mais alterações,
-        # o loop irá continuar. Caso contrário, sai do loop.
-        if commit_result != 0 or not has_uncommitted_changes():
+        # Se o commit foi bem-sucedido, sai do loop
+        if commit_result != 0:
             break
 
 
