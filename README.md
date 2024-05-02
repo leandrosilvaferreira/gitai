@@ -18,6 +18,13 @@ O projeto também utiliza as bibliotecas `openai`, `python-dotenv` e `pyinstalle
 
 ![Gitai](docs/commits.jpg)
 
+## 🎥 Tutorial em Vídeo
+
+Clique na imagem abaixo para assistir ao tutorial em vídeo sobre o Gitai:
+
+[![AUTOMATIZAÇÃO DE COMMITS DO GIT COM IA: GITAI (OPEN SOURCE E GRATUITO)](http://img.youtube.com/vi/GAQ4mmGxg7c/0.jpg)](https://www.youtube.com/watch?v=GAQ4mmGxg7c "AUTOMATIZAÇÃO DE COMMITS DO GIT COM IA: GITAI (OPEN SOURCE E GRATUITO)")
+
+
 ## ⚡ Instalando a Aplicação no Mac
 
 Depois de gerar o arquivo `.pkg`, você pode seguir os passos abaixo para instalar a aplicação no seu Mac:
