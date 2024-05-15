@@ -85,8 +85,6 @@ def generate_release_notes(commits, new_version, tag):
     Se as instruções não forem seguidas corretamente, o resultado não será aceito.
     """)
 
-    print(prompt)
-
     return call_provider_api(prompt)
 
 
