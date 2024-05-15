@@ -10,7 +10,9 @@ A aplicação analisa as alterações feitas em um projeto, identifica a linguag
 
 Além disso, Gitai automatiza o processo de commit, adicionando todas as alterações ao índice do Git, realizando o commit com a mensagem gerada e, opcionalmente, fazendo push das alterações para o repositório remoto.
 
-O projeto também utiliza as bibliotecas `openai`, `python-dotenv` e `pyinstaller` para criar um executável que inclui as dependências do ambiente virtual e que lê as variáveis de ambiente de um arquivo `.env` na mesma pasta que o executável.
+Para a geração da mensagem de commit, é possível escolher entre as LLMs `OpenAI` ou `Groq`.
+
+O projeto também utiliza as bibliotecas `openai`, `groq`, `python-dotenv` e `pyinstaller` para criar um executável que inclui as dependências do ambiente virtual e que lê as variáveis de ambiente de um arquivo `.env` na mesma pasta que o executável.
 
 ## 💻 Screenshot
 
@@ -36,15 +38,66 @@ Depois de gerar o arquivo `.pkg`, você pode seguir os passos abaixo para instal
 
 Lembre-se de que, após a instalação, você deve configurar o arquivo `.env` com as variáveis de ambiente necessárias para a aplicação funcionar corretamente.
 
+## 🤖 Escolhendo o Modelo de IA
+
+O Gitai oferece suporte a dois provedores de IA para gerar mensagens de commit: `OpenAI` e `Groq`. 
+
+Cada um tem suas características, custos e limites de utilização. 
+
+Ambos os provedores são altamente capazes, mas sua escolha pode depender de suas necessidades específicas e do orçamento disponível. 
+
+Se você precisa de uma grande capacidade de processamento e pode arcar com os custos, OpenAI é uma excelente opção. Por outro lado, se você prefere um serviço sem custo e pode gerenciar dentro dos limites de utilização, Groq é uma alternativa viável e eficiente.
+
+Abaixo estão as informações detalhadas sobre cada provedor para ajudá-lo a escolher o melhor para suas necessidades.
+
+### OpenAI
+
+OpenAI é um serviço pago que oferece modelos de linguagem avançados. 
+
+O modelo mais eficiente disponível é o `gpt-4o`, que tem uma janela de contexto de 128K tokens. 
+
+- **Custo**: 
+  - $5.00 por 1M tokens para Input
+  - $15.00 por 1M tokens para Output
+- **Site**: [OpenAI](https://platform.openai.com/docs/introduction)
+
+### Groq
+
+Groq é um serviço gratuito, mas com limites de utilização. 
+
+O modelo recomendado é o `mixtral-8x7b-32768`, que oferece uma janela de contexto de 32,768 tokens.
+
+- **Limites de Utilização**:
+  - **Requests por Minuto**: 30
+  - **Requests por Dia**: 14,400
+  - **Tokens por Minuto**: 5,000
+- **Site**: [Groq](https://console.groq.com/)
+
+
+
 ## 🌱 Configurando o .env
 
 Antes de executar o aplicativo, você precisa configurar o arquivo `.env` na pasta `dist` ou na pasta onde o GITAI foi instalado. Este arquivo contém as variáveis de ambiente que o aplicativo precisa para funcionar corretamente.
 
-Abra o arquivo `.env` em um editor de texto e preencha as variáveis de ambiente. Por exemplo:
+Você pode escolher entre usar o provedor `OpenAI` ou `Groq`.
+
+Abra o arquivo `.env` em um editor de texto e preencha as variáveis de ambiente.
+
+### Exemplo de configuração para OpenAI
 
 ```dotenv
-OPENAI_API_KEY=your_openai_api_key
-OPENAI_MODEL=gpt-3.5-turbo
+PROVIDER=openai
+API_KEY=your_openai_api_key
+MODEL=gpt-3.5-turbo
+LANGUAGE=en
+```
+
+### Exemplo de configuração para Groq
+
+```dotenv
+PROVIDER=groq
+API_KEY=your_groq_api_key
+MODEL=mixtral-8x7b-32768
 LANGUAGE=en
 ```
 
@@ -217,7 +270,7 @@ O Gitai irá analisar as alterações feitas no seu projeto, identificar a lingu
 - [x] Gerar release para Windows
 - [x] Gerar release para Linux
 - [x] Atualizar a documentação para incluir instruções de instalação para Windows e Linux
-- [ ] Adicionar possibilidade de utilizar a API do GROQ para gerar mensagens de commit
+- [x] Adicionar possibilidade de utilizar a API do GROQ para gerar mensagens de commit
 - [ ] Adicionar binário executável automaticamente no PATH
 - [ ] Adicionar suporte para mais linguagens de programação
 - [ ] Traduzir a documentação para Inglês
