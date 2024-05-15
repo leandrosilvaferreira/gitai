@@ -4,7 +4,6 @@ import sys
 from textwrap import dedent
 import argparse
 
-import openai
 from dotenv import load_dotenv
 
 # Obtém o caminho do diretório do executável
@@ -18,7 +17,7 @@ env_path = os.path.join(exe_dir, '.env')
 load_dotenv(dotenv_path=env_path)
 
 # Lista de variáveis de ambiente necessárias
-required_env_vars = ['OPENAI_MODEL', 'OPENAI_API_KEY', 'LANGUAGE']
+required_env_vars = ['PROVIDER', 'MODEL', 'API_KEY', 'LANGUAGE']
 
 # Verifica se cada variável de ambiente necessária está definida e não está em branco
 for var in required_env_vars:
@@ -27,13 +26,25 @@ for var in required_env_vars:
         print(f'Por favor, defina o valor no arquivo .env localizado em: {env_path}')
         sys.exit(1)
 
-openai.api_key = os.getenv('OPENAI_API_KEY')
-model = os.getenv('OPENAI_MODEL')
+provider = os.getenv('PROVIDER')
+model = os.getenv('MODEL')
+api_key = os.getenv('API_KEY')
 language = os.getenv('LANGUAGE')
+
+if provider == 'openai':
+    import openai
+
+    openai.api_key = api_key
+elif provider == 'groq':
+    from groq import Groq
+
+    groq_client = Groq(api_key=api_key)
+else:
+    print(f'Erro: Provedor {provider} não suportado.')
+    sys.exit(1)
 
 
 def detect_project_language(project_path):
-    # Expanded dictionary with characteristic files for each language
     language_files = {
         'Node.js': ['package.json', 'yarn.lock'],
         'Python': ['requirements.txt', 'Pipfile', 'pyproject.toml'],
@@ -42,15 +53,10 @@ def detect_project_language(project_path):
         'PHP': ['composer.json', 'composer.lock']
     }
 
-    # Check for the existence of characteristic files in the project directory
     for message_language, files in language_files.items():
-        if not isinstance(files, list):
-            files = [files]
         if any(os.path.exists(os.path.join(project_path, file)) for file in files):
             return message_language
 
-    # Additional check for PHP projects without dependency managers
-    # Look for .php files in the project directory
     for root, dirs, files in os.walk(project_path):
         for file in files:
             if file.endswith('.php'):
@@ -64,7 +70,7 @@ def generate_commit_message(status_output, project_language, base_message):
     Com base nas informações fornecidas abaixo, crie uma mensagem de commit seguindo o padrão de Conventional Commits, 
     que é amplamente adotado para tornar as mensagens de commit mais descritivas e úteis. Este padrão utiliza prefixos 
     específicos para categorizar o tipo de mudança realizada, seguido de uma breve descrição. 
-    
+
     Os prefixos do padrão de Conventional Commits mais comuns são:
         - feat: Uma nova funcionalidade
         - fix: Uma correção de bug
@@ -75,7 +81,7 @@ def generate_commit_message(status_output, project_language, base_message):
     Descrição básica da mudança fornecida pelo programador a qual você deve usar como base para o início da sua mensagem: '{base_message}'
 
     Abaixo seguem as mudanças detalhadas (incluindo arquivos modificados e o que foi incluído, alterado ou excluído) geradas pelo comando 'git status': 
-    
+
     ```
     {status_output}
     ```
@@ -87,32 +93,49 @@ def generate_commit_message(status_output, project_language, base_message):
     o motivo da mudança e, se aplicável, o impacto da mudança.
 
     Sempre que possível, cite na mensagem de commit somente os arquivos principais modificados sem incluir o path.
-    
-    A mensagem final gerada não deve ter símboloes ``` ou qualquer outra formatação e deve ser no idioma {language}.
+
+    A mensagem final gerada não deve ter símbolos ``` ou qualquer outra formatação e deve ser obrigatoriamente no idioma {language}.
     """)
 
-    # print(prompt)
+    return call_provider_api(prompt)
 
-    # O código para chamar a API da OpenAI e processar a resposta permanece o mesmo...
-    response = openai.chat.completions.create(
-        model=model,
-        temperature=0.5,
-        max_tokens=150,
-        top_p=1.0,
-        frequency_penalty=0.0,
-        presence_penalty=0.0,
-        messages=[
-            {
-                "role": "user",
-                "content": prompt,
-            },
-        ],
-    )
-    return response.choices[0].message.content.replace('```', '').strip()
+
+def call_provider_api(prompt):
+    match provider:
+        case 'openai':
+            print(f'Provider: {provider} - Model: {model}')
+            response = openai.Completion.create(
+                model=model,
+                prompt=prompt,
+                temperature=0.5,
+                max_tokens=150,
+                top_p=1.0,
+                frequency_penalty=0.0,
+                presence_penalty=0.0
+            )
+            return response.choices[0].text.strip()
+        case 'groq':
+            print(f'Provider: {provider} - Model: {model}')
+            chat_completion = groq_client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "Você é um assistente que ajuda a gerar mensagens de commit para um repositório Git."
+                        )
+                    },
+                    {"role": "user", "content": prompt}
+                ],
+                model=model
+            )
+            return chat_completion.choices[0].message.content.strip()
+
+        case _:
+            print(f'Erro: Provedor {provider} não suportado.')
+            sys.exit(1)
 
 
 def run_git_command(command):
-    """Executa um comando git e retorna a saída."""
     try:
         result = subprocess.run(command, check=True, text=True, capture_output=True, encoding='utf-8')
         return result.stdout.strip(), result.returncode
@@ -123,27 +146,19 @@ def run_git_command(command):
 
 
 def has_uncommitted_changes():
-    # Verifica se há mudanças não commitadas
     status_output, _ = run_git_command(['git', 'status', '--porcelain'])
     return len(status_output) > 0
 
 
 def commit_changes(commit_message):
-    # Continua tentando commitar até que não haja mais mudanças feitas pelo hook de pré-commit
     while has_uncommitted_changes():
-        # Adiciona todos os arquivos modificados
         run_git_command(['git', 'add', '.'])
-
-        # Tenta fazer o commit
         _, commit_result = run_git_command(['git', 'commit', '-m', commit_message])
-
-        # Se o commit foi bem-sucedido, sai do loop
         if commit_result != 0:
             break
 
 
 def main():
-    # Cria o parser
     parser = argparse.ArgumentParser(
         description='Gitai commit and push script.',
         usage="gitai <caminho_do_projeto> '<mensagem_genérica>' [--push]"
@@ -152,41 +167,29 @@ def main():
     parser.add_argument('base_message', type=str, help='The base commit message.')
     parser.add_argument('--push', action='store_true', default=False, help='Whether to push after committing.')
 
-    # Analisa os argumentos
     args = parser.parse_args()
-
-    # Muda para o diretório do projeto
     os.chdir(args.project_path)
 
-    # Detecta a linguagem do projeto
     project_language = detect_project_language(args.project_path)
-
-    # Obtém a lista de arquivos modificados que ainda não foram adicionados ao índice
     status_output, _ = run_git_command(['git', 'status'])
-
-    # Obtém as alterações detalhadas
     diff_output, _ = run_git_command(['git', 'diff'])
 
-    # Gera a mensagem de commit
     commit_message = generate_commit_message(status_output + "\n" + diff_output, project_language, args.base_message)
 
     print("\n\nMensagem de commit gerada:\n")
     print(commit_message)
     print("\n")
 
-    # Faz o commit
     commit_changes(commit_message)
     print("-> Gitai concluiu o commit com sucesso.")
 
-    # Se push_after_commit for true, executa git push
     if args.push:
-        # Verifica se existem atualizações remotas
-        run_git_command(['git', 'fetch'])  # Atualiza as informações locais
+        run_git_command(['git', 'fetch'])
         status_output, _ = run_git_command(['git', 'status', '-uno'])
 
         if 'have diverged' in status_output:
             print(f"Existem alterações remotas no branch atual, faça merge primeiro antes de fazer push.\nMsg:\n{status_output}")
-            sys.exit(1)  # Interrompe o script se houver alterações remotas
+            sys.exit(1)
 
         run_git_command(['git', 'push'])
         print("-> Gitai concluiu o push com sucesso.")
