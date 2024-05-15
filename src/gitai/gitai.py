@@ -120,9 +120,19 @@ def call_provider_api(prompt):
                 messages=[
                     {
                         "role": "system",
-                        "content": (
-                            "Você é um assistente que ajuda a gerar mensagens de commit para um repositório Git."
-                        )
+                        "content": dedent(f"""
+                            Você é um assistente que ajuda a gerar mensagens de commit para um repositório Git.
+                            
+                            As mensagens de commit devem seguir o padrão de Conventional Commits, que usa prefixos específicos para categorizar o tipo de mudança realizada (feat, fix, chore, etc.).
+                            
+                            A descrição deve ser concisa e clara, explicando o que foi feito, o motivo da mudança e, se aplicável, o impacto da mudança. 
+                            
+                            As mensagens devem ser geradas com base nas alterações fornecidas pelo comando 'git status' e em uma descrição básica fornecida pelo usuário opcionalmente.
+                             
+                            Você NUNCA deve gerar comentários adicionais ou utilizar símbolos como ``` para identificar a mensagem de commit.
+                             
+                            O resultado final deverá ser somente a mensagem de commit de acordo com as instruções solicitadas pelo usuário.
+                        """)
                     },
                     {"role": "user", "content": prompt}
                 ],
