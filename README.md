@@ -10,7 +10,7 @@ A aplicação analisa as alterações feitas em um projeto, identifica a linguag
 
 Além disso, Gitai automatiza o processo de commit, adicionando todas as alterações ao índice do Git, realizando o commit com a mensagem gerada e, opcionalmente, fazendo push das alterações para o repositório remoto.
 
-Para a geração da mensagem de commit, é possível escolher entre as LLMs `OpenAI` ou `Groq`.
+Para a geração da mensagem de commit, é possível escolher entre os modelos de linguagem avançados da `OpenAI` ou `Groq`.
 
 O projeto também utiliza as bibliotecas `openai`, `groq`, `python-dotenv` e `pyinstaller` para criar um executável que inclui as dependências do ambiente virtual e que lê as variáveis de ambiente de um arquivo `.env` na mesma pasta que o executável.
 
