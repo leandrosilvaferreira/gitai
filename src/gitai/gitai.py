@@ -95,7 +95,9 @@ def generate_commit_message(status_output, project_language, base_message):
 
     Sempre que possível, cite na mensagem de commit somente os arquivos principais modificados sem incluir o path.
 
-    A mensagem final gerada não deve ter símbolos ``` ou qualquer outra formatação e deve ser obrigatoriamente no idioma {language}.
+    A mensagem final gerada não deve ter símbolos ``` ou qualquer outra formatação.
+     
+    Utilize obrigatoriamente o idioma '{language}' na geração de sua resposta.
     """)
 
     return call_provider_api(prompt)
