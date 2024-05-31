@@ -87,17 +87,18 @@ def generate_commit_message(status_output, project_language, base_message):
     {status_output}
     ```
 
-    Com base nas informações acima, melhore a descrição básica para criar uma mensagem de commit objetiva, clara e 
-    seguindo o padrão de Conventional Commits. 
-
-    A mensagem deve começar com o prefixo apropriado seguido de uma descrição concisa que explique o que foi feito, 
-    o motivo da mudança e, se aplicável, o impacto da mudança.
-
-    Sempre que possível, cite na mensagem de commit somente os arquivos principais modificados sem incluir o path.
-
-    A mensagem final gerada não deve ter símbolos ``` ou qualquer outra formatação.
-     
-    Utilize obrigatoriamente o idioma '{language}' na geração de sua resposta.
+    Com base nas informações acima, melhore a descrição básica para criar uma mensagem de commit objetiva.
+    
+    Regras obrigatórias:
+    - Você deve seguir o padrão de Conventional Commits.
+    - A primeira linha da mensagem deve obrigatoriamente começar com um dos prefixos do padrão de Conventional Commits (feat, fix, chore, etc.) seguido de uma descrição concisa que explique o que foi feito
+    - Após a primeira linha, sempre adicione uma explicação objetiva das alterações realizadas, o motivo da mudança e, se aplicável, o impacto da mudança.
+    - Sempre que possível, cite na mensagem de commit somente os arquivos principais modificados sem incluir o path.
+    - NÃO adicione comentários ou explicações adicionais além da mensagem de commit gerada.
+    - NÃO utilize símbolos como ``` ou qualquer outra formatação para identificar a mensagem de commit.
+    - NÃO adicione quebras de linha ou espaços em branco antes da mensagem de commit.
+    - A saída deve ser APENAS a mensagem de commit final conforme as instruções.
+    - Utilize obrigatoriamente o idioma '{language}' na geração de sua resposta.
     """)
 
     return call_provider_api(prompt)
@@ -113,13 +114,13 @@ def call_provider_api(prompt):
                             A descrição deve ser concisa e clara, explicando o que foi feito, o motivo da mudança e, se aplicável, o impacto da mudança.
                             As mensagens devem ser geradas com base nas alterações fornecidas pelo comando 'git status' e em uma descrição básica fornecida pelo usuário opcionalmente. 
 
-                            Regras importantes:
+                            Regras obrigatórias:
                             - NÃO adicione comentários ou explicações adicionais além da mensagem de commit gerada.
-                            - NÃO utilize símbolos como ``` para identificar a mensagem de commit.
+                            - NÃO utilize símbolos como ```  ou qualquer outra formatação para identificar a mensagem de commit.
                             - NÃO adicione quebras de linha ou espaços em branco antes da mensagem de commit.
                             - A saída deve ser APENAS a mensagem de commit final conforme as instruções.
                             - A primeira linha da mensagem deve obrigatoriamente começar com um dos prefixos do padrão de Conventional Commits (feat, fix, chore, etc.).
-                            - Após a primeira linha, sempre adicione uma explicação objetiva das alterações realizadas.
+                            - Após a primeira linha, sempre adicione uma explicação objetiva das alterações realizadas, o motivo da mudança e, se aplicável, o impacto da mudança.
 
                             Se as instruções não forem seguidas corretamente, o resultado não será aceito.
                         """)
@@ -133,7 +134,7 @@ def call_provider_api(prompt):
             response = openai_client.chat.completions.create(
                 messages=messages,
                 model=model,
-                temperature=1,
+                temperature=0.5,
                 max_tokens=500,
                 top_p=1.0,
                 frequency_penalty=0.0,
@@ -144,7 +145,7 @@ def call_provider_api(prompt):
             response = groq_client.chat.completions.create(
                 messages=messages,
                 model=model,
-                temperature=1,
+                temperature=0.5,
                 max_tokens=500,
                 top_p=1.0,
                 frequency_penalty=0.0,
