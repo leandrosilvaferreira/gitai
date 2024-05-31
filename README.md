@@ -145,6 +145,11 @@ Se você deseja analisar somente uma pasta específica ou um projeto em outra pa
 ```bash
 gitai /Users/username/MeuProjeto 'Adicionada nova funcionalidade'
 ```
+Para gerar o commit e fazer push de forma automática, você pode adicionar a flag `--push` ao comando:
+
+```bash
+gitai . 'Adicionada nova funcionalidade' --push
+```
 
 ## 👨‍💻 Desenvolvimento
 
