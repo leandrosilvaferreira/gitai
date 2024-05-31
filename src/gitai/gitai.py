@@ -32,9 +32,10 @@ api_key = os.getenv('API_KEY')
 language = os.getenv('LANGUAGE')
 
 if provider == 'openai':
-    import openai
+    from openai import OpenAI
 
-    openai.api_key = api_key
+    openai_client = OpenAI(api_key=api_key)
+
 elif provider == 'groq':
     from groq import Groq
 
@@ -101,45 +102,53 @@ def generate_commit_message(status_output, project_language, base_message):
 
 
 def call_provider_api(prompt):
-    match provider:
-        case 'openai':
-            print(f'Provider: {provider} - Model: {model}')
-            response = openai.Completion.create(
-                model=model,
-                prompt=prompt,
-                temperature=0.5,
-                max_tokens=150,
-                top_p=1.0,
-                frequency_penalty=0.0,
-                presence_penalty=0.0
-            )
-            return response.choices[0].text.strip()
-        case 'groq':
-            print(f'Provider: {provider} - Model: {model}')
-            chat_completion = groq_client.chat.completions.create(
-                messages=[
-                    {
-                        "role": "system",
-                        "content": dedent(f"""
+    messages = [
+        {
+            "role": "system",
+            "content": dedent(f"""
                             Você é um assistente que ajuda a gerar mensagens de commit para um repositório Git. 
                             As mensagens de commit devem seguir o padrão de Conventional Commits, que usa prefixos específicos para categorizar o tipo de mudança realizada (feat, fix, chore, etc.). 
                             A descrição deve ser concisa e clara, explicando o que foi feito, o motivo da mudança e, se aplicável, o impacto da mudança.
                             As mensagens devem ser geradas com base nas alterações fornecidas pelo comando 'git status' e em uma descrição básica fornecida pelo usuário opcionalmente. 
-                            
+
                             Regras importantes:
-                            - NÃO adicione comentários ou explicações adicionais.
+                            - NÃO adicione comentários ou explicações adicionais além da mensagem de commit gerada.
                             - NÃO utilize símbolos como ``` para identificar a mensagem de commit.
                             - NÃO adicione quebras de linha ou espaços em branco antes da mensagem de commit.
                             - A saída deve ser APENAS a mensagem de commit final conforme as instruções.
-                            
+                            - A primeira linha da mensagem deve obrigatoriamente começar com um dos prefixos do padrão de Conventional Commits (feat, fix, chore, etc.).
+                            - Após a primeira linha, sempre adicione uma explicação objetiva das alterações realizadas.
+
                             Se as instruções não forem seguidas corretamente, o resultado não será aceito.
                         """)
-                    },
-                    {"role": "user", "content": prompt}
-                ],
-                model=model
+        },
+        {"role": "user", "content": prompt}
+    ]
+
+    match provider:
+        case 'openai':
+            print(f'Provider: {provider} - Model: {model}')
+            response = openai_client.chat.completions.create(
+                messages=messages,
+                model=model,
+                temperature=1,
+                max_tokens=500,
+                top_p=1.0,
+                frequency_penalty=0.0,
+                presence_penalty=0.0)
+            return response.choices[0].message.content.strip()
+        case 'groq':
+            print(f'Provider: {provider} - Model: {model}')
+            response = groq_client.chat.completions.create(
+                messages=messages,
+                model=model,
+                temperature=1,
+                max_tokens=500,
+                top_p=1.0,
+                frequency_penalty=0.0,
+                presence_penalty=0.0
             )
-            return chat_completion.choices[0].message.content.strip()
+            return response.choices[0].message.content.strip()
 
         case _:
             print(f'Erro: Provedor {provider} não suportado.')

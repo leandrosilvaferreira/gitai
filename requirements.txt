@@ -22,7 +22,7 @@ lxml_html_clean==0.1.1
 macholib==1.16.3
 newspaper3k==0.2.8
 nltk==3.8.1
-openai==1.17.1
+openai==1.30.5
 packaging==24.0
 pillow==10.3.0
 pydantic==2.7.0

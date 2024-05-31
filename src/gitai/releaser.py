@@ -16,9 +16,10 @@ api_key = os.getenv('API_KEY')
 language = os.getenv('LANGUAGE')
 
 if provider == 'openai':
-    import openai
+    from openai import OpenAI
 
-    openai.api_key = api_key
+    openai_client = OpenAI(api_key=api_key)
+
 elif provider == 'groq':
     from groq import Groq
 
@@ -89,35 +90,41 @@ def generate_release_notes(commits, new_version, tag):
 
 
 def call_provider_api(prompt):
+    messages = [
+        {
+            "role": "system",
+            "content": dedent("""
+                                Você é um assistente que ajuda a gerar notas de release para um repositório Git. 
+                                As mensagens de commit devem ser organizadas em categorias como Novidades, Correções e Outras alterações. 
+                                A saída deve ser um texto em markdown formatado conforme o modelo fornecido, sem comentários ou formatação adicional.
+                            """)
+        },
+        {"role": "user", "content": prompt}
+    ]
+
     """Chama a API do provedor especificado (OpenAI ou Groq) para gerar o conteúdo."""
     match provider:
         case 'openai':
-            response = openai.Completion.create(
+            response = openai_client.chat.completions.create(
+                messages=messages,
                 model=model,
-                prompt=prompt,
-                temperature=0.5,
+                temperature=1,
+                max_tokens=1000,
+                top_p=1.0,
+                frequency_penalty=0.0,
+                presence_penalty=0.0)
+            return response.choices[0].message.content.strip()
+        case 'groq':
+            response = groq_client.chat.completions.create(
+                messages=messages,
+                model=model,
+                temperature=1,
                 max_tokens=1000,
                 top_p=1.0,
                 frequency_penalty=0.0,
                 presence_penalty=0.0
             )
-            return response.choices[0].text.strip()
-        case 'groq':
-            chat_completion = groq_client.chat.completions.create(
-                messages=[
-                    {
-                        "role": "system",
-                        "content": dedent("""
-                            Você é um assistente que ajuda a gerar notas de release para um repositório Git. 
-                            As mensagens de commit devem ser organizadas em categorias como Novidades, Correções e Outras alterações. 
-                            A saída deve ser um texto em markdown formatado conforme o modelo fornecido, sem comentários ou formatação adicional.
-                        """)
-                    },
-                    {"role": "user", "content": prompt}
-                ],
-                model=model
-            )
-            return chat_completion.choices[0].message.content.strip()
+            return response.choices[0].message.content.strip()
         case _:
             print(f'Erro: Provedor {provider} não suportado.')
             sys.exit(1)
