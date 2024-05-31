@@ -6,8 +6,8 @@ import argparse
 
 from dotenv import load_dotenv
 
-# Obtém o caminho do diretório do executável
 exe_dir = os.path.dirname(sys.executable)
+print('Gitai v.0.2.0-beta')
 print('exe_dir:', exe_dir)
 
 # Constrói o caminho do arquivo .env
