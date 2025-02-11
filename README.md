@@ -64,8 +64,8 @@ OpenAI is a paid service that offers advanced language models.
 The most efficient available model is `gpt-4o`, which has a context window of 128K tokens.
 
 - **Cost**: 
-  - $5.00 per 1M tokens for Input
-  - $15.00 per 1M tokens for Output
+  - $2.50 per 1M tokens for Input
+  - $10.00 per 1M tokens for Output
 - **Website**: [OpenAI](https://platform.openai.com/docs/introduction)
 
 ### Groq
@@ -405,8 +405,8 @@ OpenAI é um serviço pago que oferece modelos de linguagem avançados.
 O modelo mais eficiente disponível é o `gpt-4o`, que tem uma janela de contexto de 128K tokens. 
 
 - **Custo**: 
-  - $5.00 por 1M tokens para Input
-  - $15.00 por 1M tokens para Output
+  - $2.50 por 1M tokens para Input
+  - $10.00 por 1M tokens para Output
 - **Site**: [OpenAI](https://platform.openai.com/docs/introduction)
 
 ### Groq
