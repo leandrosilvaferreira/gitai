@@ -8,7 +8,7 @@ import tempfile
 from dotenv import load_dotenv
 
 exe_dir = os.path.dirname(sys.executable)
-print('Gitai v.0.5.1-beta')
+print('Gitai v.0.2.1-beta')
 print('exe_dir:', exe_dir)
 
 # Constrói o caminho do arquivo .env
