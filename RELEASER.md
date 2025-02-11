@@ -1,4 +1,4 @@
-## Gitai - Release Notes Generator
+##  🚀 Gitai - Release Notes Generator
 
 This document provides detailed instructions for using the `releaser.py` script to generate release notes for a git repository.
 
