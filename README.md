@@ -157,7 +157,7 @@ To automatically generate the commit and push it, you can add the `--push` flag 
 gitai . 'Added new feature' --push
 ```
 
-### 🚀 Generating Release Notes
+## 🚀 Generating Release Notes
 
 The `releaser.py` script is used to generate release notes for any Git project. It analyzes the commits made since the last tag and generates a detailed release document.
 
@@ -505,7 +505,7 @@ Para gerar o commit e fazer push de forma automática, você pode adicionar a fl
 gitai . 'Adicionada nova funcionalidade' --push
 ```
 
-### 🚀 Gerando Notas de Lançamento (Release Notes)
+## 🚀 Gerando Notas de Lançamento (Release Notes)
 
 O script `releaser.py` é usado para gerar notas de lançamento para qualquer projeto Git. Ele analisa os commits feitos desde a última tag e gera um documento de lançamento detalhado.
 
