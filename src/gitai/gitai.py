@@ -8,7 +8,7 @@ from textwrap import dedent
 from dotenv import load_dotenv
 
 exe_dir = os.path.dirname(sys.executable)
-print('Gitai v.0.2.1-beta')
+print('Gitai v.0.2.2-beta')
 print('exe_dir:', exe_dir)
 
 # Construct the path to the .env file
