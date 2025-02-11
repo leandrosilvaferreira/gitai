@@ -7,7 +7,7 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 
-# Carrega as variáveis de ambiente do arquivo .env
+# Load environment variables from the .env file
 load_dotenv()
 
 provider = os.getenv('PROVIDER')
@@ -25,65 +25,65 @@ elif provider == 'groq':
 
     groq_client = Groq(api_key=api_key)
 else:
-    print(f'Erro: Provedor {provider} não suportado.')
+    print(f'Error: Provider {provider} not supported.')
     sys.exit(1)
 
 
 def run_git_command(command):
-    """Executa um comando git e retorna a saída."""
+    """Executes a git command and returns its output."""
     try:
         result = subprocess.run(command, check=True, text=True, capture_output=True, encoding='utf-8')
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
-        print(f"Erro ao executar o comando:\n-> {command}\nerror: {e.stderr}")
-        print(f"\n\nSaída de erro padrão:\n {e.output}")
+        print(f"Error executing command:\n-> {command}\nerror: {e.stderr}")
+        print(f"\n\nStandard error output:\n {e.output}")
         sys.exit(1)
 
 
 def get_commit_messages_since_tag(tag):
-    """Obtém todas as mensagens de commit desde a tag especificada."""
+    """Retrieves all commit messages since the specified tag."""
     command = ['git', 'log', f'{tag}..HEAD', '--pretty=format:%h %s']
     return run_git_command(command).split('\n')
 
 
 def generate_release_notes(commits, new_version, tag):
-    """Gera as notas de release com base nos commits fornecidos."""
+    """Generates release notes based on the provided commits."""
     prompt = dedent(f"""
-    Você é um assistente que ajuda a gerar notas de release para um repositório Git. 
-    Abaixo estão os commits desde a última tag {tag}. 
-    Por favor, organize os commits nas seguintes categorias: Novidades, Correções e Outras alterações. 
-    Gere uma mensagem de release em formato markdown no idioma '{language}' usando o seguinte modelo:
+    You are an assistant that helps generate release notes for a Git repository.
+    Below are the commits since the last tag {tag}.
+    Please organize the commits into the following categories: New Features, Bug Fixes, and Other Changes.
+    Generate a release message in markdown format in the language '{language}' using the following template:
 
     ```
     # Release {new_version}
     <SUMMARY/>
 
-    ### New
-    - Descrição das novidades (commits).
+    ### New Features
+    - Description of new features (commits).
 
-    ### Fix
-    - Descrição das correções (commits).
+    ### Bug Fixes
+    - Description of bug fixes (commits).
 
-    ### Other changes
-    - Descrição de outras alterações (commits).
+    ### Other Changes
+    - Description of other changes (commits).
 
-    Agradecemos a todos os colaboradores que tornaram esta release possível! Para mais detalhes, consulte as notas completas da versão.
+    We thank all the contributors who made this release possible! For more details, please refer to the complete version notes.
 
-    **Full Changelog:** [Ver commits de {new_version}](https://github.com/leandrosilvaferreira/gitai/compare/{tag}...{new_version})
+    **Full Changelog:** [See commits for {new_version}](https://github.com/leandrosilvaferreira/gitai/compare/{tag}...{new_version})
     ```
 
     Commits:
     {commits}
-    
-    Regras importantes:
-        - O conteúdo gerado deve obrigatoriamente utilizar o idioma '{language}'.
-        - Substituir <SUMMARY/> do modelo por um resumo de forma objetiva e entusiasmada das alterações realizadas desde a última tag {tag}
-        - NÃO adicione comentários ou explicações adicionais.
-        - NÃO utilize símbolos como ``` para identificar a mensagem de commit.
-        - A mensagem deve ser clara, concisa, bem organizada.
-        - Lembre-se de seguir o modelo fornecido.
-        
-    Se as instruções não forem seguidas corretamente, o resultado não será aceito.
+
+    Important rules:
+        - The generated content must be in the language '{language}'.
+        - Replace <SUMMARY/> in the template with a brief and enthusiastic summary of the changes made since the last tag {tag}.
+        - DO NOT add any additional comments or explanations.
+        - DO NOT use symbols like ``` to denote commit messages.
+        - The message must be clear, concise, and well-organized.
+        - Remember to follow the provided template.
+
+    If the instructions are not followed correctly, the result will not be accepted.
     """)
 
     return call_provider_api(prompt)
@@ -94,15 +94,15 @@ def call_provider_api(prompt):
         {
             "role": "system",
             "content": dedent("""
-                                Você é um assistente que ajuda a gerar notas de release para um repositório Git. 
-                                As mensagens de commit devem ser organizadas em categorias como Novidades, Correções e Outras alterações. 
-                                A saída deve ser um texto em markdown formatado conforme o modelo fornecido, sem comentários ou formatação adicional.
+                                You are an assistant that helps generate release notes for a Git repository.
+                                Commit messages should be organized into categories such as New Features, Bug Fixes, and Other Changes.
+                                The output must be a markdown-formatted text according to the provided template, with no additional comments or formatting.
                             """)
         },
         {"role": "user", "content": prompt}
     ]
 
-    """Chama a API do provedor especificado (OpenAI ou Groq) para gerar o conteúdo."""
+    """Calls the API of the specified provider (OpenAI or Groq) to generate the content."""
     match provider:
         case 'openai':
             response = openai_client.chat.completions.create(
@@ -126,17 +126,17 @@ def call_provider_api(prompt):
             )
             return response.choices[0].message.content.strip()
         case _:
-            print(f'Erro: Provedor {provider} não suportado.')
+            print(f'Error: Provider {provider} not supported.')
             sys.exit(1)
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Gerador de notas de release para o Git.',
-        usage="releaser.py <tag_antiga> <nova_versao>"
+        description='Git release notes generator.',
+        usage="releaser.py <old_tag> <new_version>"
     )
-    parser.add_argument('old_tag', type=str, help='A tag antiga do Git.')
-    parser.add_argument('new_version', type=str, help='A nova versão para a release.')
+    parser.add_argument('old_tag', type=str, help='The old Git tag.')
+    parser.add_argument('new_version', type=str, help='The new release version.')
 
     args = parser.parse_args()
 
@@ -146,11 +146,11 @@ def main():
     release_notes = generate_release_notes(formatted_commits, args.new_version, args.old_tag)
 
     release_filename = os.path.join('dist', f"release_{args.new_version}.md")
-    os.makedirs('dist', exist_ok=True)  # Certifica-se de que a pasta 'dist' existe
+    os.makedirs('dist', exist_ok=True)  # Ensure the 'dist' folder exists
     with open(release_filename, 'w') as file:
         file.write(release_notes)
 
-    print(f"Notas de release geradas com sucesso em {release_filename}.")
+    print(f"Release notes successfully generated in {release_filename}.")
 
 
 if __name__ == "__main__":
