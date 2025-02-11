@@ -1,9 +1,9 @@
+import argparse
 import os
 import subprocess
 import sys
-from textwrap import dedent
-import argparse
 import tempfile
+from textwrap import dedent
 
 from dotenv import load_dotenv
 
@@ -47,22 +47,89 @@ else:
 
 
 def detect_project_language(project_path):
-    language_files = {
-        'Node.js': ['package.json', 'yarn.lock'],
-        'Python': ['requirements.txt', 'Pipfile', 'pyproject.toml'],
-        'Java': ['pom.xml', 'build.gradle', 'build.gradle.kts', '.java-version'],
+    # Indicator files in the project's root directory
+    indicator_files = {
+        'Node.js': ['package.json', 'yarn.lock', 'package-lock.json', 'npm-shrinkwrap.json'],
+        'Python': ['requirements.txt', 'Pipfile', 'pyproject.toml', 'setup.py', 'setup.cfg', 'manage.py'],
+        'Java': ['pom.xml', 'build.gradle', 'build.gradle.kts', 'build.xml', '.java-version'],
         'Go': ['go.mod', 'Gopkg.lock'],
-        'PHP': ['composer.json', 'composer.lock']
+        'PHP': ['composer.json', 'composer.lock', 'index.php'],
+        'Ruby': ['Gemfile', 'Gemfile.lock', 'Rakefile', 'config.ru', '.ruby-version'],
+        'Rust': ['Cargo.toml', 'Cargo.lock'],
+        'Haskell': ['stack.yaml', 'cabal.project'],
+        'Swift': ['Package.swift'],
+        'Elixir': ['mix.exs'],
+        'Dart': ['pubspec.yaml'],
+        'Scala': ['build.sbt'],
+        'Perl': ['Makefile.PL', 'Build.PL'],
+        'R': ['.Rproj']
     }
 
-    for message_language, files in language_files.items():
-        if any(os.path.exists(os.path.join(project_path, file)) for file in files):
-            return message_language
+    # File extension indicators in the project's root directory
+    extension_indicators = {
+        'C#': ['.csproj', '.sln'],
+        'Haskell': ['.cabal'],
+        'Swift': ['.xcodeproj', '.xcworkspace'],
+        'Kotlin': ['.kt', '.kts'],
+        'C/C++': ['.c', '.cpp', '.h', '.hpp'],
+        'JavaScript': ['.js', '.jsx'],
+        'TypeScript': ['.ts', '.tsx'],
+        'Python': ['.py'],
+        'Java': ['.java']
+    }
 
+    try:
+        root_files = os.listdir(project_path)
+    except Exception:
+        return "Unknown"
+
+    # Check for indicator files in the project root
+    for prog_language, indicators in indicator_files.items():
+        for indicator in indicators:
+            # If the indicator is specified with a subdirectory (e.g., 'project/build.properties')
+            if os.path.sep in indicator:
+                if os.path.exists(os.path.join(project_path, indicator)):
+                    return prog_language
+            else:
+                if indicator in root_files:
+                    return prog_language
+
+    # Check for file extensions in the project root
+    for prog_language, extensions in extension_indicators.items():
+        for file in root_files:
+            if any(file.endswith(ext) for ext in extensions):
+                return prog_language
+
+    # Recursive search for indicator files in subdirectories
     for root, dirs, files in os.walk(project_path):
         for file in files:
+            # Node.js indicators
+            if file in ['package.json', 'yarn.lock', 'package-lock.json']:
+                return 'Node.js'
+            # PHP indicator
             if file.endswith('.php'):
                 return 'PHP'
+            # Python indicator
+            if file.endswith('.py'):
+                return 'Python'
+            # Java indicator
+            if file.endswith('.java'):
+                return 'Java'
+            # Ruby indicators
+            if file in ['Gemfile', 'Rakefile']:
+                return 'Ruby'
+            # Rust indicators
+            if file in ['Cargo.toml', 'Cargo.lock']:
+                return 'Rust'
+            # C# indicator
+            if file.endswith('.csproj'):
+                return 'C#'
+            # Dart indicator
+            if file == 'pubspec.yaml':
+                return 'Dart'
+            # Swift indicator
+            if file == 'Package.swift':
+                return 'Swift'
 
     return "Unknown"
 
