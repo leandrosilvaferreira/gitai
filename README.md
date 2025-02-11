@@ -1,8 +1,8 @@
 # Gitai - Automated Conventional Commits in Git with AI
 
 Choose your language / Escolha o idioma:
-- 🇺🇸 [English](#english)
-- 🇧🇷 [Português](#português)
+- 🇺🇸 [English](#-english)
+- 🇧🇷 [Português](#-português)
 
 ---
 
