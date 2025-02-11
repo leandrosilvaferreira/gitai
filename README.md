@@ -322,6 +322,10 @@ Obrigado por seu interesse em nosso projeto. Estamos ansiosos para ver suas cont
 - Email: [leandro@notyped.com](mailto:leandro@notyped.com)
 - LinkedIn: [Leandro Ferreira](https://www.linkedin.com/in/leandrosilvaferreira/)
 
+## 👨‍💻 Atividades últimos 30 dias
+
+![Alt](https://repobeats.axiom.co/api/embed/0202ff53ce643fbe0bbb419d2addc4aafd2313a6.svg "Repobeats analytics image")
+
 ## 🙌 Contribuidores
 
 Obrigado a estes incríveis contribuidores
