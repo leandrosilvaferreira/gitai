@@ -157,6 +157,12 @@ To automatically generate the commit and push it, you can add the `--push` flag 
 gitai . 'Added new feature' --push
 ```
 
+### 🚀 Generating Release Notes
+
+The `releaser.py` script is used to generate release notes for any Git project. It analyzes the commits made since the last tag and generates a detailed release document.
+
+For detailed instructions on how to use the `releaser.py` script, please refer to the [RELEASER.md](RELEASER.md) document.
+
 ## 👨‍💻 Development
 
 ### Prerequisites
@@ -283,9 +289,9 @@ Gitai will analyze the changes made in your project, identify the programming la
 - [x] Update the documentation to include installation instructions for Windows and Linux
 - [x] Add the possibility of using the GROQ API to generate commit messages
 - [x] Translate the documentation to English
+- [x] Translate prompts to English
 - [ ] Automatically add the executable binary to the PATH
 - [ ] Add support for more programming languages
-- [ ] Translate prompts to English
 - [ ] Add automated tests
 
 ## 🙌 Contributing
@@ -499,6 +505,12 @@ Para gerar o commit e fazer push de forma automática, você pode adicionar a fl
 gitai . 'Adicionada nova funcionalidade' --push
 ```
 
+### 🚀 Gerando Notas de Lançamento (Release Notes)
+
+O script `releaser.py` é usado para gerar notas de lançamento para qualquer projeto Git. Ele analisa os commits feitos desde a última tag e gera um documento de lançamento detalhado.
+
+Para instruções detalhadas sobre como usar o script `releaser.py`, consulte o documento [RELEASER.md](RELEASER.md).
+
 ## 👨‍💻 Desenvolvimento
 
 ### Pré-requisitos
@@ -625,9 +637,9 @@ O Gitai irá analisar as alterações feitas no seu projeto, identificar a lingu
 - [x] Atualizar a documentação para incluir instruções de instalação para Windows e Linux
 - [x] Adicionar possibilidade de utilizar a API do GROQ para gerar mensagens de commit
 - [x] Traduzir a documentação para Inglês
+- [x] Traduzir prompts para Inglês 
 - [ ] Adicionar binário executável automaticamente no PATH
 - [ ] Adicionar suporte para mais linguagens de programação
-- [ ] Traduzir prompts para Inglês
 - [ ] Adicionar testes automatizados
 
 
