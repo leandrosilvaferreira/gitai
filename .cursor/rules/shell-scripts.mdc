@@ -1,0 +1,13 @@
+---
+description: Shell Script Development Rules
+globs: **/*.sh,**/*.bash,**/scripts/**/*
+alwaysApply: false
+---
+# Shell Script Rules
+
+- Start scripts with a shebang (e.g., `#!/bin/bash`).
+- Use `set -e` to make the script exit immediately if a command exits with a non-zero status.
+- Use `set -u` to treat unset variables as an error.
+- Use `set -o pipefail` to cause a pipeline to return the exit status of the last command to exit with a non-zero status.
+- Quote all variables (`"$VAR"`) to prevent word splitting and globbing issues.
+- Use `$(command)` for command substitution instead of backticks.

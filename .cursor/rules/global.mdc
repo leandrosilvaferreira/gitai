@@ -1,0 +1,6 @@
+---
+description: Global Rules for Sequential Thinking
+globs: 
+alwaysApply: true
+---
+- Always use tool sequentialthinking to analyse, plan and execute modifications in source code

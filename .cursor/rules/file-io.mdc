@@ -1,0 +1,12 @@
+---
+description: File I/O Operations Rules
+globs: **/*.py
+alwaysApply: false
+---
+# File I/O Rules
+
+- Use `with open(...) as f:` syntax to ensure files are automatically closed.
+- Always specify the file encoding, e.g., `open('file.txt', 'r', encoding='utf-8')`.
+- Use the `pathlib` module for object-oriented filesystem paths, as it provides a cleaner, cross-platform API.
+- Handle potential `IOError` or `FileNotFoundError` exceptions when dealing with file operations.
+- Avoid constructing paths by string concatenation; use `pathlib` or `os.path.join()` instead.

@@ -1,0 +1,12 @@
+---
+description: API Client Implementation Rules
+globs: **/*.py,**/api/**/*.py,**/client/**/*.py
+alwaysApply: false
+---
+# API Client Rules
+
+- Centralize API call logic into dedicated functions.
+- Implement robust error handling for API requests, including connection errors, timeouts, and API-specific errors (e.g., rate limits, authentication).
+- Use `try...except` blocks to gracefully handle potential `requests.exceptions.RequestException` or provider-specific exceptions.
+- Configure a reasonable timeout for all external API calls.
+- Avoid exposing API keys directly in the code; always load them from environment variables.

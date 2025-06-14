@@ -1,0 +1,12 @@
+---
+description: Security Guidelines and Best Practices
+globs: 
+alwaysApply: true
+---
+# Security Rules
+
+- Never commit API keys, passwords, or other secrets to the repository.
+- Use a `.env` file for storing sensitive data and ensure `.env` is listed in `.gitignore`.
+- Regularly review dependencies for known vulnerabilities.
+- Be cautious with shell command execution (`subprocess`) and sanitize inputs to prevent injection attacks.
+- Ensure the `.gitignore` file is comprehensive to avoid leaking sensitive or unnecessary files.

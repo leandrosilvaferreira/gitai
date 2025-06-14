@@ -1,0 +1,12 @@
+---
+description: CLI Design and Implementation Rules
+globs: **/*cli*.py,**/main.py,**/__main__.py
+alwaysApply: false
+---
+# CLI Design Rules
+
+- Use Python's `argparse` module for parsing command-line arguments.
+- Provide clear and descriptive help messages for all arguments (`help='...'`).
+- Define default values for optional arguments where it makes sense.
+- Validate user inputs and provide friendly error messages for invalid arguments.
+- Ensure the CLI returns appropriate exit codes (0 for success, non-zero for errors).

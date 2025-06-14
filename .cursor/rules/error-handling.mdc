@@ -1,0 +1,12 @@
+---
+description: Error Handling Best Practices
+globs:
+alwaysApply: true
+---
+# Error Handling Rules
+
+- Implement a consistent error handling strategy across the application.
+- Use specific, custom exceptions where appropriate to convey clear error conditions.
+- Catch specific exceptions rather than using a blanket `except Exception:`.
+- Log errors with sufficient context (e.g., stack trace, relevant variables) to facilitate debugging.
+- For a CLI, ensure that errors result in a non-zero exit code and a clear message to the user on `stderr`.

@@ -1,0 +1,12 @@
+---
+description: Git Integration and Command Execution Rules
+globs: **/*.py,**/*.sh
+alwaysApply: false
+---
+# Git Integration Rules
+
+- Use `subprocess.run()` to execute Git commands.
+- Always check the return code of the subprocess call to handle potential errors (`check=True`).
+- Capture `stdout` and `stderr` to get command output and error details.
+- Decode the output from bytes to string using a specific encoding, preferably UTF-8.
+- Sanitize any user input that is passed to shell commands to prevent command injection vulnerabilities.

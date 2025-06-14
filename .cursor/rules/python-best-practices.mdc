@@ -1,0 +1,12 @@
+---
+description: Python Coding Standards and Best Practices
+globs: **/*.py
+alwaysApply: false
+---
+# Python Best Practices
+
+- Follow PEP 8 style guide for all Python code.
+- Use type hints for function signatures to improve clarity and allow static analysis.
+- Prefer f-strings for string formatting (`f"hello {name}"`).
+- Keep functions small and focused on a single responsibility.
+- Use list comprehensions for creating lists concisely.

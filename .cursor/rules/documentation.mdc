@@ -1,0 +1,12 @@
+---
+description: Documentation Standards and Requirements
+globs: **/*.py,**/*.md,**/*.rst
+alwaysApply: false
+---
+# Documentation Rules
+
+- All public functions, classes, and modules should have a docstring explaining their purpose, arguments, and return values.
+- Follow a consistent docstring format (e.g., Google, reStructuredText).
+- Use inline comments to explain complex or non-obvious parts of the code.
+- Keep the `README.md` and other documentation files (`RELEASER.md`) up-to-date with any changes to functionality, setup, or usage.
+- Ensure all examples in the documentation are tested and working.

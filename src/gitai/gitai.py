@@ -8,7 +8,7 @@ from textwrap import dedent
 from dotenv import load_dotenv
 
 exe_dir = os.path.dirname(sys.executable)
-print('Gitai v.0.2.2-beta')
+print('Gitai v.0.2.3-beta')
 print('exe_dir:', exe_dir)
 
 # Construct the path to the .env file
@@ -140,9 +140,10 @@ def generate_commit_message(diff_output, project_language, base_message):
     which is widely adopted to make commit messages more descriptive and useful. This standard uses specific prefixes 
     to categorize the type of change made, followed by a brief description. 
 
-    The most common prefixes of the Conventional Commits standard are:
+    The ONLY accepted prefixes for this project are:
         - feat: A new feature
         - fix: A bug fix
+        - docs: Documentation changes
         - chore: Maintenance changes or minor fixes that do not alter functionality
 
     For your information and better understanding, the project in question uses the programming language {project_language}.
@@ -159,7 +160,7 @@ def generate_commit_message(diff_output, project_language, base_message):
 
     Mandatory rules:
     - You must follow the Conventional Commits standard.
-    - The first line of the message must start with one of the Conventional Commits prefixes (feat, fix, chore, etc.) followed by a concise description explaining what was done.
+    - The first line of the message must start with one of these EXACT prefixes (feat, fix, docs, chore) followed by a concise description explaining what was done.
     - After the first line, always add an objective explanation of the changes made, the reason for the change, and, if applicable, the impact of the change.
     - Whenever possible, mention only the main modified files in the commit message without including the path.
     - DO NOT add any comments or additional explanations beyond the generated commit message.
@@ -167,6 +168,19 @@ def generate_commit_message(diff_output, project_language, base_message):
     - DO NOT add line breaks or whitespace before the commit message.
     - The output must be ONLY the final commit message as per the instructions.
     - You must use the language '{language}' in your response generation.
+
+    <output_format>
+    Your response must follow this exact format:
+    
+    Line 1: [prefix]: [concise description]
+    Line 2: [empty line]
+    Line 3+: [detailed explanation of changes, reasons, and impact]
+    
+    Example:
+    feat: add defaultOrganizationName field to CreateUserDto
+
+    Add defaultOrganizationName field to CreateUserDto for custom workspace naming. Allow users to specify a default organization name in CreateUserDto, which is used as the workspace name in UserService. This change provides flexibility for users to define their workspace name, enhancing user personalization and improving the user experience. Modified files include UserService.java and CreateUserDto.java.
+    </output_format>
     """)
 
     return call_provider_api(prompt)
@@ -178,7 +192,7 @@ def call_provider_api(prompt):
             "role": "system",
             "content": dedent(f"""
                             You are an assistant that helps generate commit messages for a Git repository. 
-                            Commit messages must follow the Conventional Commits standard, which uses specific prefixes to categorize the type of change made (feat, fix, chore, etc.). 
+                            Commit messages must follow the Conventional Commits standard, which uses ONLY these specific prefixes to categorize the type of change made: feat, fix, docs, chore. 
                             The description must be concise and clear, explaining what was done, the reason for the change, and, if applicable, the impact of the change.
                             The messages must be generated based on the changes provided by the 'git diff' command and an optional basic description provided by the user. 
 
@@ -187,8 +201,25 @@ def call_provider_api(prompt):
                             - DO NOT use symbols such as ``` or any other formatting to denote the commit message.
                             - DO NOT add line breaks or whitespace before the commit message.
                             - The output must be ONLY the final commit message as per the instructions.
-                            - The first line of the message must start with one of the Conventional Commits prefixes (feat, fix, chore, etc.).
+                            - The first line of the message must start with one of these EXACT prefixes: feat, fix, docs, chore.
                             - After the first line, always add an objective explanation of the changes made, the reason for the change, and, if applicable, the impact of the change.
+
+                            <output_format>
+                            CRITICAL: Your response must follow this exact structure:
+                            
+                            Line 1: [prefix]: [concise description]
+                            (where prefix must be exactly one of: feat, fix, docs, chore)
+                            Line 2: [EMPTY LINE - mandatory line break]
+                            Line 3+: [detailed explanation]
+                            
+                            CORRECT format example:
+                            feat: add user authentication system
+
+                            Implement JWT-based authentication with login and registration endpoints. Add middleware for route protection and user session management. This enhancement improves application security and enables personalized user experiences.
+                            
+                            INCORRECT format (everything in one line):
+                            feat: add user authentication system - Implement JWT-based authentication with login and registration endpoints...
+                            </output_format>
 
                             If the instructions are not followed correctly, the result will not be accepted.
                         """)
