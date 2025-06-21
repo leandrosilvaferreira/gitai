@@ -8,7 +8,7 @@ from textwrap import dedent
 from dotenv import load_dotenv
 
 exe_dir = os.path.dirname(sys.executable)
-print('Gitai v.0.2.3-beta')
+print('Gitai v.0.2.4-beta')
 print('exe_dir:', exe_dir)
 
 # Construct the path to the .env file
@@ -183,7 +183,9 @@ def generate_commit_message(diff_output, project_language, base_message):
     </output_format>
     """)
 
-    return call_provider_api(prompt)
+    commit_message = call_provider_api(prompt)
+    signature = "\n\n🤖 Commit generated with [Gitai](https://github.com/leandrosilvaferreira/gitai)"
+    return commit_message + signature
 
 
 def call_provider_api(prompt):
