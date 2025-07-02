@@ -41,8 +41,15 @@ elif provider == 'groq':
     from groq import Groq
 
     groq_client = Groq(api_key=api_key)
+
+elif provider == 'anthropic':
+    from anthropic import Anthropic
+
+    anthropic_client = Anthropic(api_key=api_key)
+
 else:
     print(f'Error: Provider {provider} is not supported.')
+    print('Supported providers: openai, groq, anthropic')
     sys.exit(1)
 
 
@@ -253,9 +260,20 @@ def call_provider_api(prompt):
                 presence_penalty=0.0
             )
             return response.choices[0].message.content.strip()
+        case 'anthropic':
+            print(f'Provider: {provider} - Model: {model}')
+            response = anthropic_client.messages.create(
+                model=model,
+                max_tokens=500,
+                temperature=0.5,
+                system=messages[0]["content"],
+                messages=[{"role": "user", "content": messages[1]["content"]}]
+            )
+            return response.content[0].text.strip()
 
         case _:
             print(f'Error: Provider {provider} is not supported.')
+            print('Supported providers: openai, groq, anthropic')
             sys.exit(1)
 
 

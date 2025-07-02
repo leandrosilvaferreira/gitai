@@ -56,14 +56,13 @@ application to function correctly.
 
 ## 🤖 Choosing the AI Model
 
-Gitai supports two AI providers for generating commit messages: `OpenAI` and `Groq`.
+Gitai supports three AI providers for generating commit messages: `OpenAI`, `Groq`, and `Anthropic`.
 
 Each has its own characteristics, costs, and usage limits.
 
-Both providers are highly capable, but your choice may depend on your specific needs and available budget.
+All providers are highly capable, but your choice may depend on your specific needs and available budget.
 
-If you need high processing power and can cover the costs, OpenAI is an excellent option. On the other hand, if you
-prefer a free service and can manage within usage limits, Groq is a viable and efficient alternative.
+If you need high processing power and can cover the costs, OpenAI is an excellent option. If you prefer a free service and can manage within usage limits, Groq is a viable alternative. For advanced reasoning and large context windows, Anthropic Claude offers cutting-edge capabilities.
 
 Below is detailed information about each provider to help you choose the best one for your needs.
 
@@ -90,12 +89,24 @@ The recommended model is `mixtral-8x7b-32768`, which offers a context window of 
     - **Tokens per Minute**: 5,000
 - **Website**: [Groq](https://console.groq.com/)
 
+### Anthropic
+
+Anthropic is a paid service that offers advanced AI models with excellent reasoning capabilities.
+
+The recommended model is `claude-3-5-sonnet-20241022`, which has a context window of 200K tokens.
+
+- **Cost**:
+    - $3.00 per 1M tokens for Input
+    - $15.00 per 1M tokens for Output
+- **Features**: Advanced reasoning, large context window, excellent code understanding
+- **Website**: [Anthropic](https://console.anthropic.com/)
+
 ## 🌱 Configuring the .env
 
 Before running the application, you need to configure the `.env` file in the `dist` folder or in the folder where Gitai
 was installed. This file contains the environment variables required for the application to function correctly.
 
-You can choose to use either the `OpenAI` provider or `Groq`.
+You can choose to use `OpenAI`, `Groq`, or `Anthropic` providers.
 
 Open the `.env` file in a text editor and fill in the environment variables.
 
@@ -114,6 +125,15 @@ LANGUAGE=en
 PROVIDER=groq
 API_KEY=your_groq_api_key
 MODEL=mixtral-8x7b-32768
+LANGUAGE=en
+```
+
+### Example configuration for Anthropic
+
+```dotenv
+PROVIDER=anthropic
+API_KEY=your_anthropic_api_key
+MODEL=claude-3-5-sonnet-20241022
 LANGUAGE=en
 ```
 
@@ -440,16 +460,14 @@ a aplicação funcionar corretamente.
 
 ## 🤖 Escolhendo o Modelo de IA
 
-O Gitai oferece suporte a dois provedores de IA para gerar mensagens de commit: `OpenAI` e `Groq`.
+O Gitai oferece suporte a três provedores de IA para gerar mensagens de commit: `OpenAI`, `Groq` e `Anthropic`.
 
 Cada um tem suas características, custos e limites de utilização.
 
-Ambos os provedores são altamente capazes, mas sua escolha pode depender de suas necessidades específicas e do orçamento
+Todos os provedores são altamente capazes, mas sua escolha pode depender de suas necessidades específicas e do orçamento
 disponível.
 
-Se você precisa de uma grande capacidade de processamento e pode arcar com os custos, OpenAI é uma excelente opção. Por
-outro lado, se você prefere um serviço sem custo e pode gerenciar dentro dos limites de utilização, Groq é uma
-alternativa viável e eficiente.
+Se você precisa de uma grande capacidade de processamento e pode arcar com os custos, OpenAI é uma excelente opção. Se você prefere um serviço sem custo e pode gerenciar dentro dos limites de utilização, Groq é uma alternativa viável. Para raciocínio avançado e grandes janelas de contexto, Anthropic Claude oferece capacidades de ponta.
 
 Abaixo estão as informações detalhadas sobre cada provedor para ajudá-lo a escolher o melhor para suas necessidades.
 
@@ -476,12 +494,24 @@ O modelo recomendado é o `mixtral-8x7b-32768`, que oferece uma janela de contex
     - **Tokens por Minuto**: 5,000
 - **Site**: [Groq](https://console.groq.com/)
 
+### Anthropic
+
+Anthropic é um serviço pago que oferece modelos de IA avançados com excelentes capacidades de raciocínio.
+
+O modelo recomendado é o `claude-3-5-sonnet-20241022`, que tem uma janela de contexto de 200K tokens.
+
+- **Custo**:
+    - $3.00 por 1M tokens para Input
+    - $15.00 por 1M tokens para Output
+- **Características**: Raciocínio avançado, grande janela de contexto, excelente compreensão de código
+- **Site**: [Anthropic](https://console.anthropic.com/)
+
 ## 🌱 Configurando o .env
 
 Antes de executar o aplicativo, você precisa configurar o arquivo `.env` na pasta `dist` ou na pasta onde o GITAI foi
 instalado. Este arquivo contém as variáveis de ambiente que o aplicativo precisa para funcionar corretamente.
 
-Você pode escolher entre usar o provedor `OpenAI` ou `Groq`.
+Você pode escolher entre usar o provedor `OpenAI`, `Groq` ou `Anthropic`.
 
 Abra o arquivo `.env` em um editor de texto e preencha as variáveis de ambiente.
 
@@ -500,6 +530,15 @@ LANGUAGE=en
 PROVIDER=groq
 API_KEY=your_groq_api_key
 MODEL=mixtral-8x7b-32768
+LANGUAGE=en
+```
+
+### Exemplo de configuração para Anthropic
+
+```dotenv
+PROVIDER=anthropic
+API_KEY=your_anthropic_api_key
+MODEL=claude-3-5-sonnet-20241022
 LANGUAGE=en
 ```
 
