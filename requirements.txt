@@ -1,5 +1,6 @@
 altgraph==0.17.4
 annotated-types==0.6.0
+colorama==0.4.6
 anyio==4.3.0
 beautifulsoup4==4.12.3
 certifi==2024.2.2

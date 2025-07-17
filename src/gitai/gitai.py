@@ -5,11 +5,93 @@ import sys
 import tempfile
 from textwrap import dedent
 
+from colorama import Back, Fore, Style, init
 from dotenv import load_dotenv
 
+# Initialize colorama for cross-platform colored output
+init(autoreset=True)
+
+
+# Utility functions for colored console output
+def print_header(message):
+    """Print header messages with cyan color and rocket emoji"""
+    print(f"{Fore.CYAN}{Style.BRIGHT}🚀 {message}{Style.RESET_ALL}")
+
+
+def print_success(message):
+    """Print success messages with green color and checkmark emoji"""
+    print(f"{Fore.GREEN}{Style.BRIGHT}✅ {message}{Style.RESET_ALL}")
+
+
+def print_info(message):
+    """Print info messages with blue color and info emoji"""
+    print(f"{Fore.BLUE}{Style.BRIGHT}ℹ️  {message}{Style.RESET_ALL}")
+
+
+def print_warning(message):
+    """Print warning messages with yellow color and warning emoji"""
+    print(f"{Fore.YELLOW}{Style.BRIGHT}⚠️  {message}{Style.RESET_ALL}")
+
+
+def print_error(message):
+    """Print error messages with red color and error emoji"""
+    print(f"{Fore.RED}{Style.BRIGHT}❌ {message}{Style.RESET_ALL}")
+
+
+def print_git_operation(message):
+    """Print git operation messages with magenta color and git emoji"""
+    print(f"{Fore.MAGENTA}{Style.BRIGHT}🔄 {message}{Style.RESET_ALL}")
+
+
+def print_ai_message(message):
+    """Print AI-related messages with cyan color and robot emoji"""
+    print(f"{Fore.CYAN}{Style.BRIGHT}🤖 {message}{Style.RESET_ALL}")
+
+
+def print_commit_message(message):
+    """Print commit message with special formatting"""
+    print(f"\n{Fore.WHITE}{Back.BLUE}{Style.BRIGHT} Generated commit message: {Style.RESET_ALL}\n")
+    print(f"{Fore.WHITE}{Style.BRIGHT}{message}{Style.RESET_ALL}")
+    print()
+
+
+def get_language_emoji(language):
+    """Get appropriate emoji for programming language"""
+    language_emojis = {
+        'Node.js': '🟢',
+        'Python': '🐍',
+        'Java': '☕',
+        'Go': '🐹',
+        'PHP': '🐘',
+        'Ruby': '💎',
+        'Rust': '🦀',
+        'Haskell': '🎩',
+        'Swift': '🍎',
+        'Elixir': '💧',
+        'Dart': '🎯',
+        'Scala': '⚖️',
+        'Perl': '🐪',
+        'R': '📊',
+        'C#': '🔷',
+        'C/C++': '⚙️',
+        'JavaScript': '🟨',
+        'TypeScript': '🔷',
+        'Unknown': '❓'
+    }
+    return language_emojis.get(language, '❓')
+
+
+def print_detected_language(language):
+    """Print detected programming language with appropriate emoji"""
+    emoji = get_language_emoji(language)
+    print_info(f'{emoji} Linguagem detectada: {language}')
+    print()
+
+
 exe_dir = os.path.dirname(sys.executable)
-print('Gitai v.0.2.4-beta')
-print('exe_dir:', exe_dir)
+print_header('Gitai v.0.2.5-beta')
+print_info(f'📁 exe_dir: {exe_dir}')
+print()
 
 # Construct the path to the .env file
 env_path = os.path.join(exe_dir, '.env')
@@ -23,8 +105,8 @@ required_env_vars = ['PROVIDER', 'MODEL', 'API_KEY', 'LANGUAGE']
 # Check if each required environment variable is set and not blank
 for var in required_env_vars:
     if not os.getenv(var):
-        print(f'Error: the environment variable {var} is not set or is blank.')
-        print(f'Please set the value in the .env file located at: {env_path}')
+        print_error(f'The environment variable {var} is not set or is blank.')
+        print_error(f'Please set the value in the .env file located at: {env_path}')
         sys.exit(1)
 
 provider = os.getenv('PROVIDER')
@@ -42,7 +124,7 @@ elif provider == 'groq':
 
     groq_client = Groq(api_key=api_key)
 else:
-    print(f'Error: Provider {provider} is not supported.')
+    print_error(f'Provider {provider} is not supported.')
     sys.exit(1)
 
 
@@ -231,7 +313,7 @@ def call_provider_api(prompt):
 
     match provider:
         case 'openai':
-            print(f'Provider: {provider} - Model: {model}')
+            print_ai_message(f'Provider: {provider} - Model: {model}')
             response = openai_client.chat.completions.create(
                 messages=messages,
                 model=model,
@@ -242,7 +324,7 @@ def call_provider_api(prompt):
                 presence_penalty=0.0)
             return response.choices[0].message.content.strip()
         case 'groq':
-            print(f'Provider: {provider} - Model: {model}')
+            print_ai_message(f'Provider: {provider} - Model: {model}')
             response = groq_client.chat.completions.create(
                 messages=messages,
                 model=model,
@@ -255,7 +337,7 @@ def call_provider_api(prompt):
             return response.choices[0].message.content.strip()
 
         case _:
-            print(f'Error: Provider {provider} is not supported.')
+            print_error(f'Provider {provider} is not supported.')
             sys.exit(1)
 
 
@@ -263,9 +345,9 @@ def run_git_command(command, exit_on_error=True):
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if result.returncode != 0:
         if exit_on_error:
-            print(f"Error executing command:\n-> {' '.join(command)}")
-            print(f"Standard output:\n{result.stdout}")
-            print(f"Error output:\n{result.stderr}")
+            print_error(f"Error executing command: {' '.join(command)}")
+            print_error(f"Standard output: {result.stdout}")
+            print_error(f"Error output: {result.stderr}")
             sys.exit(1)
         else:
             output = result.stdout.strip() + '\n' + result.stderr.strip()
@@ -302,14 +384,14 @@ def perform_git_pull():
 
     if returncode != 0:
         if 'CONFLICT' in output or 'CONFLITO' in output:
-            print("Conflitos detectados durante git pull:")
-            print(output)
+            print_warning("Conflitos detectados durante git pull:")
+            print_error(output)
             return False
         else:
-            print(f"Error executing git pull:\n{output}")
+            print_error(f"Error executing git pull: {output}")
             sys.exit(1)
     else:
-        print("Git pull executed successfully.")
+        print_success("Git pull executed successfully.")
         return True
 
 
@@ -327,49 +409,47 @@ def main():
 
     # Check if there are uncommitted changes before git pull
     if has_uncommitted_changes():
-        print("Uncommitted local changes detected.")
+        print_warning("Uncommitted local changes detected.")
         project_language = detect_project_language(args.project_path)
+        print_detected_language(project_language)
         diff_output, _ = run_git_command(['git', 'diff'])
         commit_message = generate_commit_message(diff_output, project_language, args.base_message)
 
-        print("\n\nGenerated commit message:\n")
-        print(commit_message)
-        print("\n")
+        print_commit_message(commit_message)
 
         commit_changes(commit_message)
-        print("-> Gitai successfully committed local changes.")
+        print_success("Gitai successfully committed local changes.")
     else:
-        print("No local changes to commit before git pull.")
+        print_info("No local changes to commit before git pull.")
 
     # Execute git pull after committing local changes
     pull_successful = perform_git_pull()
 
     if not pull_successful:
-        print("Git pull failed due to conflicts. Please resolve the conflicts manually.")
+        print_error("Git pull failed due to conflicts. Please resolve the conflicts manually.")
         sys.exit(1)
 
     # Check if there are new conflicts after the pull
     if has_uncommitted_changes():
-        print("Conflicts or uncommitted changes detected after pull.")
+        print_warning("Conflicts or uncommitted changes detected after pull.")
         project_language = detect_project_language(args.project_path)
+        print_detected_language(project_language)
         diff_output, _ = run_git_command(['git', 'diff'])
         commit_message = generate_commit_message(diff_output, project_language, "Resolving conflicts after git pull")
 
-        print("\n\nGenerated commit message for resolving conflicts:\n")
-        print(commit_message)
-        print("\n")
+        print_commit_message(commit_message)
 
         commit_changes(commit_message)
-        print("-> Gitai successfully committed changes after pull.")
+        print_success("Gitai successfully committed changes after pull.")
     else:
-        print("No changes to commit after git pull.")
+        print_info("No changes to commit after git pull.")
 
     if args.push:
         if is_branch_ahead():
             run_git_command(['git', 'push'])
-            print("-> Gitai successfully pushed changes.")
+            print_success("Gitai successfully pushed changes.")
         else:
-            print("No changes to push. The local branch is synchronized with the remote.")
+            print_info("No changes to push. The local branch is synchronized with the remote.")
 
 
 if __name__ == "__main__":
