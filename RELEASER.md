@@ -71,10 +71,10 @@ The `releaser.py` script generates release notes based on the commits made since
 ### Example Usage
 
 ```bash
-source venv/bin/activate && python src/gitai/releaser.py v0.2.0-beta v0.2.1-beta
+source venv/bin/activate && python src/gitai/releaser.py v0.2.4-beta v0.2.5-beta
 ```
 
-This command will generate release notes for all commits made since the `v0.2.0-beta` tag and save them in a file named `release_v0.2.1-beta.md` in the `dist` directory.
+This command will generate release notes for all commits made since the `v0.2.4-beta` tag and save them in a file named `release_v0.2.5-beta.md` in the `dist` directory.
 
 ### Output
 

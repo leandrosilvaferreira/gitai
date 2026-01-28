@@ -320,14 +320,31 @@ def call_provider_api(prompt):
     match provider:
         case 'openai':
             print_ai_message(f'Provider: {provider} - Model: {model}')
-            response = openai_client.chat.completions.create(
-                messages=messages,
-                model=model,
-                temperature=0.5,
-                max_tokens=500,
-                top_p=1.0,
-                frequency_penalty=0.0,
-                presence_penalty=0.0)
+            
+            # Determine which parameter to use for max tokens
+            # Newer models (o1, o3, gpt-5) use max_completion_tokens
+            is_new_model = any(model.startswith(prefix) for prefix in ['o1', 'o3', 'gpt-5'])
+            token_param_name = 'max_completion_tokens' if is_new_model else 'max_tokens'
+            
+            # Prepare arguments
+            kwargs = {
+                "messages": messages,
+                "model": model,
+                "temperature": 0.5,
+                "top_p": 1.0,
+                "frequency_penalty": 0.0,
+                "presence_penalty": 0.0,
+                token_param_name: 500
+            }
+            
+            # OpenAI's o1 series models currently do not support the 'temperature' parameter for completion, 
+            # or it behaves differently. For safety with o1/o3 specifically, we might want to let it default or check docs.
+            # However, for now, the primary issue is max_tokens. 
+            # Note: o1-preview and o1-mini typically default temperature to 1.0 and it's not adjustable in some contexts,
+            # but providing it usually doesn't error unless it's strictly enforced.
+            # Let's keep temperature for now unless we find it's also unsupported.
+            
+            response = openai_client.chat.completions.create(**kwargs)
             return response.choices[0].message.content.strip()
         case 'groq':
             print_ai_message(f'Provider: {provider} - Model: {model}')
