@@ -9,6 +9,27 @@ Choose your language / Escolha o idioma:
 
 # 🇺🇸 English
 
+> [!IMPORTANT]
+> **📢 This project has been discontinued**
+> 
+> We're excited to announce that Gitai has evolved! 🎉
+> 
+> The Python version you're looking at has been **discontinued** and replaced by a brand new JavaScript version that brings several improvements:
+> 
+> ✨ **What's new:**
+> - 🚀 **No installer required** - Install globally with a single command using npm
+> - 🌍 **True cross-platform** - Works seamlessly on Windows, macOS, and Linux
+> - ⚡ **Faster performance** - Optimized for speed and efficiency
+> 
+> 🔗 **New repository:** [gitai-js](https://github.com/leandrosilvaferreira/gitai-js)
+> 
+> **⚠️ Important for migration:**
+> Before installing the new JavaScript version, please remove the PATH configuration pointing to this Python version from your `.bash_profile` or `.zshrc` file.
+> 
+> We appreciate your support and look forward to seeing you in the new version! 💙
+
+---
+
 [![Release Notes](https://img.shields.io/github/release/leandrosilvaferreira/gitai)](https://github.com/leandrosilvaferreira/gitai/releases)
 [![GitHub star chart](https://img.shields.io/github/stars/leandrosilvaferreira/gitai?style=social)](https://star-history.com/#leandrosilvaferreira/gitai)
 [![GitHub fork](https://img.shields.io/github/forks/leandrosilvaferreira/gitai?style=social)](https://github.com/leandrosilvaferreira/gitai/fork)
@@ -412,6 +433,27 @@ For more details, see the [LICENSE](LICENSE.md) file in the repository.
 ## 🇧🇷 Português
 
 # Gitai - Conventional Commits automatizados no Git com IA
+
+> [!IMPORTANT]
+> **📢 Este projeto foi descontinuado**
+> 
+> Estamos animados em anunciar que o Gitai evoluiu! 🎉
+> 
+> A versão em Python que você está vendo foi **descontinuada** e substituída por uma nova versão em JavaScript que traz várias melhorias:
+> 
+> ✨ **Novidades:**
+> - 🚀 **Não precisa de instalador** - Instale globalmente com um único comando usando npm
+> - 🌍 **Verdadeiramente multiplataforma** - Funciona perfeitamente no Windows, macOS e Linux
+> - ⚡ **Desempenho mais rápido** - Otimizado para velocidade e eficiência
+> 
+> 🔗 **Novo repositório:** [gitai-js](https://github.com/leandrosilvaferreira/gitai-js)
+> 
+> **⚠️ Importante para migração:**
+> Antes de instalar a nova versão em JavaScript, por favor remova a configuração do PATH que aponta para esta versão em Python do seu arquivo `.bash_profile` ou `.zshrc`.
+> 
+> Agradecemos seu apoio e esperamos vê-lo na nova versão! 💙
+
+---
 
 [![Release Notes](https://img.shields.io/github/release/leandrosilvaferreira/gitai)](https://github.com/leandrosilvaferreira/gitai/releases)
 [![GitHub star chart](https://img.shields.io/github/stars/leandrosilvaferreira/gitai?style=social)](https://star-history.com/#leandrosilvaferreira/gitai)
